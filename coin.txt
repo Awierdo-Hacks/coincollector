@@ -1,0 +1,16 @@
+PYRAMID
+
+https://circuitdigest.com/microcontroller-projects/arduino-currency-counter-using-ir-and-color-sensor
+
+zie yt voor andere vids 
+
+https://www.instructables.com/Coin-Sorter-Counter-Arduino-Uno/
+
+coin dispenser==> https://www.youtube.com/watch?v=Ysor1yikttY&ab_channel=MrTacoBout-It
+
+ontmanteling van de coin dispenser ==> https://www.youtube.com/watch?v=Kl7uTviiOG0&ab_channel=Electronoobs
+
+Behuizing==> https://www.tinkercad.com/things/cCZFTG00UGH
+https://learn.adafruit.com/arcade-coin-op/build-it
+
+servo dispenser=> https://www.thingiverse.com/thing:4533011/files 
