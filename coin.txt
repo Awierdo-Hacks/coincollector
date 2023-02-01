@@ -14,3 +14,5 @@ Behuizing==> https://www.tinkercad.com/things/cCZFTG00UGH
 https://learn.adafruit.com/arcade-coin-op/build-it
 
 servo dispenser=> https://www.thingiverse.com/thing:4533011/files 
+
+muntenteller 3d model: https://www.yeggi.com/q/coin+acceptor/ 
