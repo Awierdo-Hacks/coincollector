@@ -20,15 +20,16 @@
           //close the connection
           mysqli_close($conn);
           ?></span></p>
-        <p>Goal: <span id="goal"><?php
+        <p><span id="goal"><?php
           //connect to your database
           $conn = mysqli_connect("localhost", "root", "", "coincollector");
           //retrieve the latest goal from the coinlog table
-          $query = "SELECT goal FROM coinlog ORDER BY id DESC LIMIT 1";
+          $query = "SELECT goal, goalnaam FROM coinlog ORDER BY id DESC LIMIT 1";
           $result = mysqli_query($conn, $query);
           $row = mysqli_fetch_assoc($result);
           $goal = $row["goal"];
-          echo $goal;
+          $goalname=$row["goalnaam"];
+          echo $goalname.":". $goal;
           //close the connection
           mysqli_close($conn);
           ?></span></p>
@@ -82,7 +83,8 @@
  
 
     <?php
-    if(isset($_POST["goal"])) {
+    $goalname= $_POST["goalname"];  
+   if(isset($_POST["goal"])) {
         $goal = $_POST["goal"];
         //connect to your database
         $conn = mysqli_connect("localhost", "root", "", "coincollector");
