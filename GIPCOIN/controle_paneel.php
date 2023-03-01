@@ -12,7 +12,7 @@
           //connect to your database
           $conn = mysqli_connect("localhost", "root", "", "coincollector");
           //retrieve the latest total amount from the coinlog table
-          $query = "SELECT totaal FROM coinlog ORDER BY id DESC LIMIT 1";
+          $query = "SELECT totaal FROM spaardata ORDER BY id DESC LIMIT 1";
           $result = mysqli_query($conn, $query);
           $row = mysqli_fetch_assoc($result);
           $totalAmount = $row["totaal"];
@@ -24,7 +24,7 @@
           //connect to your database
           $conn = mysqli_connect("localhost", "root", "", "coincollector");
           //retrieve the latest goal from the coinlog table
-          $query = "SELECT goal FROM coinlog ORDER BY id DESC LIMIT 1";
+          $query = "SELECT goal,FROM spaardata ORDER BY id DESC LIMIT 1";
           $result = mysqli_query($conn, $query);
           $row = mysqli_fetch_assoc($result);
           $goal = $row["goal"];
