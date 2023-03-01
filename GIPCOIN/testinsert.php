@@ -17,7 +17,7 @@ $time = date("Y-m-d H:i:s");
 $coinvalue = 0;
 $totaal = 0;
 $goal= 0;
-$goalname= 'uw doel'
+$goalname= 'uw doel';
 // Prepare SQL statement
 $sql = "INSERT INTO spaardata ( totaal, doelbedrag, doelnaam) VALUES (  '$totaal', '$goal', '$goalname'  )";
 
