@@ -8,7 +8,7 @@
     <div class="container pt-5">
       <h1 class="text-center">Coin Acceptor Status</h1>
       <div id="status-display" class="text-center">
-        <p>Total Amount: <span id="total-amount"><?php
+        <p>Totaal bedrag: <span id="total-amount"><?php
           //connect to your database
           $conn = mysqli_connect("localhost", "root", "", "coincollector");
           //retrieve the latest total amount from the coinlog table
@@ -20,15 +20,16 @@
           //close the connection
           mysqli_close($conn);
           ?></span></p>
-        <p>Goal: <span id="goal"><?php
+        <p><span id="goal"><?php
           //connect to your database
           $conn = mysqli_connect("localhost", "root", "", "coincollector");
           //retrieve the latest goal from the coinlog table
-          $query = "SELECT goal,FROM spaardata ORDER BY id DESC LIMIT 1";
+          $query = "SELECT doelbedrag, doelnaam FROM spaardata ORDER BY id DESC LIMIT 1";
           $result = mysqli_query($conn, $query);
           $row = mysqli_fetch_assoc($result);
-          $goal = $row["goal"];
-          echo $goal;
+          $goalname = $row["doelnaam"];
+          $goal = $row["doelbedrag"];
+          echo $goalname .": ". $goal ;
           //close the connection
           mysqli_close($conn);
           ?></span></p>
@@ -87,7 +88,7 @@
         //connect to your database
         $conn = mysqli_connect("localhost", "root", "", "coincollector");
         //update the data in your database
-        $query = "UPDATE coinlog SET goal = $goal";
+        $query = "UPDATE spaardata SET doelbedrag = $goal, doelnaam= $goalname";
         $result = mysqli_query($conn, $query);
         //close the connection
         mysqli_close($conn);
