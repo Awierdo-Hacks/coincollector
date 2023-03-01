@@ -16,3 +16,5 @@ https://learn.adafruit.com/arcade-coin-op/build-it
 servo dispenser=> https://www.thingiverse.com/thing:4533011/files 
 
 muntenteller 3d model: https://www.yeggi.com/q/coin+acceptor/ 
+
+muntensorter met funnel: https://www.tinkercad.com/things/iDtBLs2Dq0I-coin-sorter
