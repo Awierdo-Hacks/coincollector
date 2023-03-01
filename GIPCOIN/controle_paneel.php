@@ -35,7 +35,9 @@
       </div>
       <h2 class="text-center">Configure Coin Acceptor</h2>
       <form method="post" action="" class="form-group mx-auto">
-        <label for="goal">Goal:</label>
+      <label for="goalname">Goalname:</label>
+      <input type="text" id="goalname" name="goalname"  class="form-control">  
+      <label for="goal">Goal:</label>
         <input type="number" id="goal" name="goal" min="0" step="0.5" value="<?php 
           if (isset($goal)) {
               echo $goal; 
