@@ -37,7 +37,7 @@ mysqli_close($conn);
 <html>
   <head>
     <title>CoinCollector</title>
-    <link rel="stylesheet" href="./Style.css">
+    
     <link rel="stylesheet" href="controle_paneel_styling.css">
   </head>
   <body>
