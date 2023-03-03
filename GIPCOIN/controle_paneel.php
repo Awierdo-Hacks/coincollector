@@ -1,37 +1,112 @@
+<?php
+
+if(isset($_POST["goal"])) {
+    $goal = $_POST["goal"];
+    //connect to your database
+    $conn = mysqli_connect("localhost", "root", "", "coincollector");
+    //update the data in your database
+    $query = "UPDATE spaardata SET doelbedrag = $goal, doelnaam= $goalname";
+    $result = mysqli_query($conn, $query);
+    //close the connection
+    mysqli_close($conn);
+    //redirect to the home page
+    header("Location:controle_paneel.php");
+}
+
+//connect to your database
+$conn = mysqli_connect("localhost", "root", "", "coincollector");
+
+//voor totaal
+$query = "SELECT totaal FROM spaardata ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
+$totalAmount = $row["totaal"];
+
+//voor doelnaam+bedrag
+$query = "SELECT doelbedrag, doelnaam FROM spaardata ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
+$goalname = $row["doelnaam"];
+$goal = $row["doelbedrag"];
+
+
+mysqli_close($conn);
+
+?>
 <!DOCTYPE html>
 <html>
   <head>
     <title>CoinCollector</title>
     <link rel="stylesheet" href="./Style.css">
+    <link rel="stylesheet" href="controle_paneel_styling.css">
   </head>
   <body>
-    <div class="container pt-5">
+    ------------------------------------------------------
+    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+<label for="dark-light"></label>
+
+<div class="light-back"></div>
+
+<div class="section-fluid-main">
+  <div class="section-row">
+    <div class="section-col-2">
+      <div class="section">
+        <p class="color-blue"> Uw totaal</p>
+      </div>
+      <h3><span class="font-weight-500"><?php echo "€".$totalAmount; ?></span> </h3>
+    </div>
+    
+    <div class="section-col-2">
+      <div class="section">
+        <p class="color-yellow"> <?php echo $goalname;?></p>
+        <h3><span class="font-weight-500"><?php echo $goal;?></span></h3>
+      </div>
+    </div>
+    
+    <input class="date-btn" type="radio" id="date-1" name="date-btn" checked />
+    <label for="date-1"><span>30 days</span></label>
+    <input class="date-btn" type="radio" id="date-2" name="date-btn" />
+    <label for="date-2"><span>90 days</span></label>
+    <input class="date-btn" type="radio" id="date-3" name="date-btn" />
+    <label for="date-3"><span>180 days</span></label>
+    <input class="date-btn" type="radio" id="date-4" name="date-btn" />
+    <label for="date-4"><span>365 days</span></label>
+    <div class="section-col-1">
+      <div class="section">
+        <div class="section-progress">
+          <div class="income days-30">
+            <div class="income-tooltip">
+              <p>Income</p>
+              <h6>$ 2,501.57</h6>
+            </div>
+          </div>
+          <div class="expense days-30">
+            <div class="expense-tooltip">
+              <p> </p>
+              <h6>$ 1,347.00</h6>
+            </div>
+          </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://front.codes/" class="logo" target="_blank">
+    <img src="https://assets.codepen.io/1462889/fcy.png" alt="">
+  </a>
+</div>
+
+  ---------------------------------------------
+  <div class="container pt-5">
       <h1 class="text-center">Coin Acceptor Status</h1>
       <div id="status-display" class="text-center">
         <p>Totaal bedrag: <span id="total-amount"><?php
-          //connect to your database
-          $conn = mysqli_connect("localhost", "root", "", "coincollector");
-          //retrieve the latest total amount from the coinlog table
-          $query = "SELECT totaal FROM spaardata ORDER BY id DESC LIMIT 1";
-          $result = mysqli_query($conn, $query);
-          $row = mysqli_fetch_assoc($result);
-          $totalAmount = $row["totaal"];
           echo $totalAmount;
-          //close the connection
-          mysqli_close($conn);
           ?></span></p>
         <p><span id="goal"><?php
-          //connect to your database
-          $conn = mysqli_connect("localhost", "root", "", "coincollector");
-          //retrieve the latest goal from the coinlog table
-          $query = "SELECT doelbedrag, doelnaam FROM spaardata ORDER BY id DESC LIMIT 1";
-          $result = mysqli_query($conn, $query);
-          $row = mysqli_fetch_assoc($result);
-          $goalname = $row["doelnaam"];
-          $goal = $row["doelbedrag"];
           echo $goalname .": ". $goal ;
-          //close the connection
-          mysqli_close($conn);
           ?></span></p>
       </div>
       <h2 class="text-center">Configure Coin Acceptor</h2>
@@ -80,21 +155,5 @@
 </button>
       </form>
     </div>
- 
-
-    <?php
-    if(isset($_POST["goal"])) {
-        $goal = $_POST["goal"];
-        //connect to your database
-        $conn = mysqli_connect("localhost", "root", "", "coincollector");
-        //update the data in your database
-        $query = "UPDATE spaardata SET doelbedrag = $goal, doelnaam= $goalname";
-        $result = mysqli_query($conn, $query);
-        //close the connection
-        mysqli_close($conn);
-        //redirect to the home page
-        header("Location:controle_paneel.php");
-    }
-    ?>
      </body>
 </html>
