@@ -39,15 +39,17 @@ mysqli_close($conn);
 <html>
 
 <head>
-  <title>CoinCollector</title>
+  <title>Cashwave</title>
 
   <link rel="stylesheet" href="controle_paneel_styling.css">
+  <link rel="stylesheet" href="menu_styling.css">
+  <script src="menu.js" defer></script>
+
   <!-- <script defer>
     document.querySelector(".section-col-1 .income").style.width = "90%";
     document.querySelector(".section-col-1 .expense").style.width = "10%";
     </script> -->
 </head>
-
 <body>
   <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
   <label for="dark-light"></label>
@@ -91,9 +93,35 @@ mysqli_close($conn);
       </div>
     </div>
   </div>
+  <header class="cd-header">
+		<div class="header-wrapper">
+			<div class="logo-wrap">
+				<a href="#" class="hover-target"><span>	<img src="image\cashwave-low-resolution-logo-color-on-transparent-background (1).png" alt=""></span></a>
+			</div>
+			<div class="nav-but-wrap">
+				<div class="menu-icon hover-target">
+					<span class="menu-icon__line menu-icon__line-left"></span>
+					<span class="menu-icon__line"></span>
+					<span class="menu-icon__line menu-icon__line-right"></span>
+				</div>					
+			</div>					
+		</div>				
+	</header>
 
-  <a href="/" class="logo" target="_blank">
-    CoinCollector
+	<div class="nav">
+		<div class="nav__content">
+			<ul class="nav__list">
+				<li class="nav__list-item active-nav"><a href="controle_paneel.php" class="hover-target">Controle Paneel</a></li>
+				<li class="nav__list-item"><a href="login.php" class="hover-target">Login</a></li>
+				<li class="nav__list-item"><a href="#" class="hover-target">Statistieken</a></li>
+				<li class="nav__list-item"><a href="#" class="hover-target">Zakgeld maker</a></li>
+				<li class="nav__list-item"><a href="#" class="hover-target">Contact</a></li>
+			</ul>
+		</div>
+	</div>		
+  <a href="#" class="link-to-portfolio hover-target" target="”_blank”"></a>
+ 
+    
   </a>
   </div>
 
