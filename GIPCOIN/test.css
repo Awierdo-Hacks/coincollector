@@ -1,293 +1,135 @@
-
-
-/* Please ❤ this if you like it! */
-
-
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
-
-body{
-	font-family: 'Poppins', sans-serif;
-	font-weight: 300;
-	font-size: 15px;
-	line-height: 1.7;
-	color: #c4c3ca;
-	background-color: #1f2029;
-	overflow-x: hidden;
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+button,
+label {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin: 5px;
+  font-size: 16px;
 }
-a {
-	cursor: pointer;
-  transition: all 200ms linear;
+.body{
+	background-image: url('https://assets.codepen.io/1462889/web-app-back.svg');}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-a:hover {
-	text-decoration: none;
+#login-register {
+  font-family: "Roboto";
+  font-size: 16px;
+  margin-top: 50px;
 }
-.link {
-  color: #c4c3ca;
-}
-.link:hover {
-  color: #ffeba7;
-}
-p {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.7;
-}
-h4 {
-  font-weight: 600;
-}
-h6 span{
-  padding: 0 20px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.section{
-  position: relative;
-  width: 100%;
-  display: block;
-}
-.full-height{
-  min-height: 100vh;
-}
-[type="checkbox"]:checked,
-[type="checkbox"]:not(:checked){
+#login-panel {
   position: absolute;
+  display: inline-block;
+  box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  z-index: 5;
+  background: white;
+  top: -40px;
+  transition: 0.5s;
+  min-height: 310px;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  padding: 15px 0;
+  border: 0;
+  border-bottom: solid 1px #dddddd;
+  font-family: inherit;
+  font-size: inherit;
+  display: block;
+  margin: 20px;
+  width: 250px;
+}
+#login-panel form {
+  position: relative;
+  transition: 0.5s;
+  top: 0;
+}
+#login-panel button {
+  margin: 0 auto;
+  display: block;
+  background: #7a95ec;
+  border-radius: 5px;
+  color: white;
+  width: 100%;
+  height: 45px;
+  margin-bottom: 5px;
+  transition: 0.5s;
+}
+#login-panel button:hover {
+  background: #7a95ec;
+}
+#login-panel button p {
+  position: relative;
+  top: 0;
+  padding: 0;
+  margin: 0 0 15px 0;
+  transition: 0.5s;
+}
+
+#box {
+  display: grid;
+  border: 1px solid #0074d9;
+  grid-template-columns: 1fr 1fr;
+  min-height: 450px;
+  width: 750px;
+  position: relative;
+}
+#box:first-child {
+  background: linear-gradient(90deg, #eaeaea 50%, #fff 50%);
+}
+label {
+  display: inline-block;
+  margin: 300px 0 10px 0;
+  cursor: pointer;
+  color: #0074d9;
+  border: 1px solid #0074d9;
+  padding: 10px 50px;
+  transition: 0.5s;
+  text-align: center;
+  height: 20px;
+  width: 100px;
+  justify-self: center;
+}
+label:hover {
+  color: white;
+  background-color: #0074d9;
+}
+input[type="checkbox"] {
+  position: absolute;
+  top: -9999px;
   left: -9999px;
 }
-.checkbox:checked + label,
-.checkbox:not(:checked) + label{
-  position: relative;
-  display: block;
-  text-align: center;
-  width: 60px;
-  height: 16px;
-  border-radius: 8px;
-  padding: 0;
-  margin: 10px auto;
-  cursor: pointer;
-  background-color: #ffeba7;
-}
-.checkbox:checked + label:before,
-.checkbox:not(:checked) + label:before{
-  position: absolute;
-  display: block;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  color: #ffeba7;
-  background-color: #102770;
-  font-family: 'unicons';
-  content: '\eb4f';
-  z-index: 20;
-  top: -10px;
-  left: -10px;
-  line-height: 36px;
-  text-align: center;
-  font-size: 24px;
-  transition: all 0.5s ease;
-}
-.checkbox:checked + label:before {
-  transform: translateX(44px) rotate(-270deg);
-}
 
-
-.card-3d-wrap {
-  position: relative;
-  width: 440px;
-  max-width: 100%;
-  height: 400px;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  perspective: 800px;
-  margin-top: 60px;
+/* Now for the nitty gritty
+  Special thanks to this dabblet for showing me the way
+  http://dabblet.com/gist/1506530
+Is there a less complex, easier, simpler way to do this? Probably.
+*/
+#sign-up-toggle:not(:checked) ~ #login-toggle:not(:checked) ~ #login-panel {
+  left: 7%;
 }
-.card-3d-wrapper {
-  width: 100%;
-  height: 100%;
-  position:absolute;    
-  top: 0;
-  left: 0;  
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  transition: all 600ms ease-out; 
+#sign-up-toggle:not(:checked) ~ #login-toggle:checked ~ #login-panel {
+  left: 48%;
 }
-.card-front, .card-back {
-  width: 100%;
-  height: 100%;
-  background-color: #2a2b38;
-  background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
-  background-position: bottom center;
-  background-repeat: no-repeat;
-  background-size: 300%;
-  position: absolute;
-  border-radius: 6px;
-  left: 0;
-  top: 0;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
+#sign-up-toggle:not(:checked) ~ #login-toggle:checked ~ #login-panel form {
+  top: -180px;
 }
-.card-back {
-  transform: rotateY(180deg);
+#sign-up-toggle:not(:checked) ~ #login-toggle:checked ~ #login-panel button p {
+  top: -35px;
 }
-.checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
-  transform: rotateY(180deg);
+#sign-up-toggle:checked ~ #login-toggle:checked ~ #login-panel {
+  left: 7%;
 }
-.center-wrap{
-  position: absolute;
-  width: 100%;
-  padding: 0 35px;
-  top: 50%;
-  left: 0;
-  transform: translate3d(0, -50%, 35px) perspective(100px);
-  z-index: 20;
-  display: block;
+#sign-up-toggle:checked ~ #login-toggle:not(:checked) ~ #login-panel {
+  left: 48%;
 }
-
-
-.form-group{ 
-  position: relative;
-  display: block;
-    margin: 0;
-    padding: 0;
+#sign-up-toggle:checked ~ #login-toggle:not(:checked) ~ #login-panel form {
+  top: -180px;
 }
-.form-style {
-  padding: 13px 20px;
-  padding-left: 55px;
-  height: 48px;
-  width: 100%;
-  font-weight: 500;
-  border-radius: 4px;
-  font-size: 14px;
-  line-height: 22px;
-  letter-spacing: 0.5px;
-  outline: none;
-  color: #c4c3ca;
-  background-color: #1f2029;
-  border: none;
-  -webkit-transition: all 200ms linear;
-  transition: all 200ms linear;
-  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
-}
-.form-style:focus,
-.form-style:active {
-  border: none;
-  outline: none;
-  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
-}
-.input-icon {
-  position: absolute;
-  top: 0;
-  left: 18px;
-  height: 48px;
-  font-size: 24px;
-  line-height: 48px;
-  text-align: left;
-  color: #ffeba7;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-
-.form-group input:-ms-input-placeholder  {
-  color: #c4c3ca;
-  opacity: 0.7;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input::-moz-placeholder  {
-  color: #c4c3ca;
-  opacity: 0.7;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input:-moz-placeholder  {
-  color: #c4c3ca;
-  opacity: 0.7;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input::-webkit-input-placeholder  {
-  color: #c4c3ca;
-  opacity: 0.7;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input:focus:-ms-input-placeholder  {
-  opacity: 0;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input:focus::-moz-placeholder  {
-  opacity: 0;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input:focus:-moz-placeholder  {
-  opacity: 0;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-.form-group input:focus::-webkit-input-placeholder  {
-  opacity: 0;
-  -webkit-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-
-.btn{  
-  border-radius: 4px;
-  height: 44px;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  -webkit-transition : all 200ms linear;
-  transition: all 200ms linear;
-  padding: 0 30px;
-  letter-spacing: 1px;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-  -ms-flex-pack: center;
-  text-align: center;
-  border: none;
-  background-color: #ffeba7;
-  color: #102770;
-  box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
-}
-.btn:active,
-.btn:focus{  
-  background-color: #102770;
-  color: #ffeba7;
-  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
-}
-.btn:hover{  
-  background-color: #102770;
-  color: #ffeba7;
-  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
-}
-
-
-
-
-.logo {
-	position: absolute;
-	top: 30px;
-	right: 30px;
-	display: block;
-	z-index: 100;
-	transition: all 250ms linear;
-}
-.logo img {
-	height: 26px;
-	width: auto;
-	display: block;
+#sign-up-toggle:checked ~ #login-toggle:not(:checked) ~ #login-panel button p {
+  top: -35px;
 }
