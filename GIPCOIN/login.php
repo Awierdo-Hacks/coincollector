@@ -34,7 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pass = $_POST['pass'];
 
     // Validate input
-    if(empty($username) || empty($password)) {
+    if(empty($username) || empty($pass)) {
         $error = "Please enter both username and password";
     } else {
         // Check if username and password match in database
