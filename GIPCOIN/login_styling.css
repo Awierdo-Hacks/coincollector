@@ -28,6 +28,10 @@ body {
   text-align: center;
 }
 
+.login-box p {
+  color: #f00;
+}
+
 .login-box .user-box {
   position: relative;
 }
@@ -165,3 +169,9 @@ body {
     bottom: 100%;
   }
 }
+  .button {
+ border-radius: 0;
+ border: none;
+background-color: #03e9f4;
+
+ }

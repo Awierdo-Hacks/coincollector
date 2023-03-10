@@ -1,16 +1,33 @@
 <?php
-$coinValue = $_GET["coinvalue"];
-$time = date("Y-m-d H:i:s");
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "coincollector";
 
-//connect to your database
-$conn = mysqli_connect("localhost", "root", "", "coincollector");
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Insert the data into the coinlog table
-$query = "INSERT INTO coinlog (tijd, coinvalue) VALUES ('$time', '$coinValue', '$totalAmount')";
-$result = mysqli_query($conn, $query);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-// Close the connection
-mysqli_close($conn);
+// Prepare data for insertion
+$time = date("Y-m-d H:i:s", 1678360283
+);
+$coinvalue = 1;
+$totaal = 25;
+$goal= 50;
+$goalname = 'auto';
+// Prepare SQL statement
+$sql = "INSERT INTO coinlog ( tijd,coinvalue   ) VALUES ( '$time', '$coinvalue' )";
 
+// Execute SQL statement
+if ($conn->query($sql) === TRUE) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
+$conn->close();
 ?>

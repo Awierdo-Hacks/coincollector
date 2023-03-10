@@ -1,0 +1,16 @@
+.chart-container {
+    border: 5px solid #7a95ec ;
+    border-radius: 8px;
+    margin: 10px auto;
+    width: 80%;
+    max-width: 800px;
+    color:aliceblue ;
+    text-align: center;
+ background-color: #6588f8;
+  }
+  
+  .chart {
+    margin: 0 auto;
+  }
+
+  

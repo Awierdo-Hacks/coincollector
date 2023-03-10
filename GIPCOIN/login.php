@@ -1,3 +1,48 @@
+<?php
+
+
+session_start();
+
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get input values
+    $username = $_POST['username'];
+    $pass = $_POST['pass'];
+
+    // Validate input
+    if(empty($username) || empty($pass)) {
+        $error = "Please enter both username and password";
+    } else {
+        // Check if username and password match in database
+        $servername = "localhost";
+        $dbusername = "root";
+        $dbpassword = "";
+        $dbname = "coincollector";
+
+        $conn = mysqli_connect($servername, $dbusername, $dbpassword, $dbname);
+
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+
+        $sql = "SELECT * FROM users WHERE username='$username' AND pass='$pass'";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) == 1) {
+            // Login successful
+            $_SESSION['loggedin'] = true;          
+            header("Location: controle_paneel.php");
+            exit();
+        } else {
+            $error = "Invalid username or password";
+        }
+        mysqli_close($conn);
+    }
+}
+
+
+
+
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,50 +65,22 @@
       <input type="password" name="pass" required="">
       <label>Password</label>
     </div>
-    <input type="submit" value="Login">
+    <p>
+    <?php
+if(isset($error)) {
+  echo $error;
+}
+    ?>
+    </p>
+    <a href="#">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+<button type="submit" class="button">inloggen </button></a>
+   
     
   </form>
 </div>
 </body>
 </html>
-<?php
-
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get input values
-    $username = $_POST['username'];
-    $pass = $_POST['pass'];
-
-    // Validate input
-    if(empty($username) || empty($pass)) {
-        $error = "Please enter both username and password";
-    } else {
-        // Check if username and password match in database
-        $servername = "localhost";
-        $dbusername = "root";
-        $dbpassword = "";
-        $dbname = "";
-
-        $conn = mysqli_connect($servername, $dbusername, $dbpassword, $dbname);
-
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        $sql = "SELECT * FROM users WHERE username='$username' AND pass='$pass'";
-        $result = mysqli_query($conn, $sql);
-
-        if(mysqli_num_rows($result) == 1) {
-            // Login successful
-            header("Location: controle_paneel.php");
-            exit();
-        } else {
-            $error = "Invalid username or password";
-        }
-        mysqli_close($conn);
-    }
-}
-
-if(isset($error)) {
-	echo '<p>' . $error . '</p>';
-}
-?>

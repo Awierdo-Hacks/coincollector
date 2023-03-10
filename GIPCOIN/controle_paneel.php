@@ -1,5 +1,14 @@
 <?php
 
+session_start();
+
+// controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  header("Location:login.php");
+  exit();
+}
+
+
 if (isset($_POST["goal"])) {
   $goal = $_POST["goal"];
   //connect to your database
@@ -112,10 +121,10 @@ mysqli_close($conn);
 		<div class="nav__content">
 			<ul class="nav__list">
 				<li class="nav__list-item active-nav"><a href="controle_paneel.php" class="hover-target">Controle Paneel</a></li>
-				<li class="nav__list-item"><a href="login.php" class="hover-target">Login</a></li>
-				<li class="nav__list-item"><a href="#" class="hover-target">Statistieken</a></li>
-				<li class="nav__list-item"><a href="#" class="hover-target">Zakgeld maker</a></li>
-				<li class="nav__list-item"><a href="#" class="hover-target">Contact</a></li>
+				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
+				<li class="nav__list-item"><a href="#" class="hover-target">Doelen</a></li>
+				<li class="nav__list-item"><a href="#" class="hover-target">Settings</a></li>
+				<li class="nav__list-item"><a href="uitlog.php" class="hover-target">Uitloggen</a></li>
 			</ul>
 		</div>
 	</div>		
@@ -144,9 +153,9 @@ mysqli_close($conn);
       <input type="number" class="form-control" id="goal" name="goal" value="<?php echo $goal; ?>" required>
       <button type="submit" class="btn btn-primary mt-3" name="submit">Update</button>
     </form>
-  </div>
+  </div>-->
 
- 
+  
+    
   </body>
-</html>
-
+  </html>
