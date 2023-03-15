@@ -120,7 +120,7 @@ mysqli_close($conn);
 	<div class="nav">
 		<div class="nav__content">
 			<ul class="nav__list">
-				<li class="nav__list-item active-nav"><a href="controle_paneel.php" class="hover-target">Controle Paneel</a></li>
+				<li class="nav__list-item active-nav"><a href="controle_paneel.php" class="hover-target">Overzicht</a></li>
 				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
 				<li class="nav__list-item"><a href="#" class="hover-target">Doelen</a></li>
 				<li class="nav__list-item"><a href="#" class="hover-target">Settings</a></li>
