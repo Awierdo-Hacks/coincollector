@@ -29,7 +29,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if(mysqli_num_rows($result) == 1) {
             // Login successful
-            $_SESSION['loggedin'] = true;          
+            $_SESSION['loggedin'] = true;     
+            $_SESSION['user'] = $username;          
+     
             header("Location: controle_paneel.php");
             exit();
         } else {

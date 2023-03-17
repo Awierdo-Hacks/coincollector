@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+
+// controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  header("Location:login.php");
+  exit();
+}
+
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
