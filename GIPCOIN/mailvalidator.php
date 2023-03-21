@@ -10,13 +10,13 @@ $email = $conn->real_escape_string($_POST['email']);
 $wachtwoord = $conn->real_escape_string($_POST['wachtwoord']);
 
 // Query uitvoeren om gebruikersgegevens te controleren
-$resultaat = $conn->query("SELECT * FROM gebruikers WHERE email = '$email' AND wachtwoord = '$wachtwoord'");
+$resultaat = $conn->query("SELECT * FROM users WHERE email = '$email' AND wachtwoord = '$wachtwoord'");
 
 // Als de gebruiker is gevonden, start dan een sessie en sla gebruikersgegevens op
 if ($resultaat->num_rows == 1) {
   // Gebruikersgegevens ophalen en opslaan in de sessie
   $gebruiker = $resultaat->fetch_assoc();
-  $_SESSION['gebruiker'] = $gebruiker;
+  $_SESSION['user'] = $gebruiker;
 
   // Redirect naar de pagina waarop de muntenteller staat
   header("Location: muntenteller.php");

@@ -11,7 +11,7 @@ WiFiClient client;
 const float coinValues[] = {2, 1, 0.5, 0.2, 0.1};
 
 // Server URL
-const String serverURL = "http://192.168.0.101/GIPCOIN/Coinloginsert.php";
+const String serverURL = "http://10.3.41.58/GIPCOIN/Coinloginsert.php";
 int impulsCount = 0;
 int i = 0;
 float totalAmount = 0;
