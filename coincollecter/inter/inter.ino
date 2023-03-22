@@ -18,6 +18,10 @@ const char* password = "fakatijger";
 // adress
 const char* serverIP = "http://10.3.41.58/GIPCOIN/Coinloginsert.php";
 
+void IRAM_ATTR countPulses() {
+  // Verhoog de pulse teller met 1
+  pulseCount++;
+}
 void setup() {
   // Seriële communicatie initialiseren
   Serial.begin(115200);
@@ -70,10 +74,7 @@ void loop() {
   }
 }
 
-void countPulses() {
-  // Verhoog de pulse teller met 1
-  pulseCount++;
-}
+
 
 void sendCoinValue(int value) {
   // Maak een HTTP-verzoek naar de server

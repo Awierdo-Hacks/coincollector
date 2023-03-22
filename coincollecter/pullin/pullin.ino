@@ -3,10 +3,10 @@
 #include <HTTPClient.h>
 
 // Definieer de pinnen van de muntenteller
-const int pulseInPin = 13;
+const int pulseInPin = 14;
 
 // Variabelen om de muntwaarde en het aantal pulsen bij te houden
-int coinValue = 0;
+float coinValue = 0;
 int pulseCount = 0;
 
 // WiFi-gegevens
@@ -21,7 +21,7 @@ void setup() {
   Serial.begin(115200);
 
   // Start de puls teller
-  pinMode(pulseInPin, INPUT);
+	pinMode(pulseInPin, INPUT_PULLUP);
 
   // Verbinden met WiFi-netwerk
   WiFi.begin(ssid, password);
@@ -35,7 +35,7 @@ void setup() {
 
 void loop() {
   // Tellen van pulsen met de pulseIn()-functie
-  pulseCount = pulseIn(pulseInPin,LOW,1000);
+  pulseCount = pulseIn(pulseInPin,LOW);
 
   // Controleer of er pulsen zijn ontvangen
   if (pulseCount > 0) {

@@ -13,8 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Prepare data for insertion
-$time = date("Y-m-d H:i:s", 1678360283
-);
+$time = date("Y-m-d H:i:s", 1678360283);
 $coinvalue = $_GET['coinvalue'];
 // Prepare SQL statement
 $sql = "INSERT INTO coinlog ( tijd,coinvalue   ) VALUES ( '$time', '$coinvalue' )";

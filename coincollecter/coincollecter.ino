@@ -1,6 +1,6 @@
 #include <WiFi.h>
 
-#define CLK 5
+#define CLK 14
 #define DIO 4
 // WiFi configuration
 const char* ssid = "WIFIIICT";
@@ -36,7 +36,7 @@ void setup() {
   // Set up coin acceptor
   pinMode(CLK, INPUT_PULLUP);
   pinMode(DIO, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(CLK), incomingImpuls, RISING);
+  attachInterrupt(digitalPinToInterrupt(CLK), incomingImpuls, FALLING);
 
   // Load total amount from EEPROM
 
