@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['loggedin'] = true;     
             $_SESSION['user'] = $username;          
      
-            header("Location: controle_paneel.php");
+            header("Location: mailvalidator.php");
             exit();
         } else {
             $error = "Invalid username or password";

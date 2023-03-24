@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <HTTPClient.h>
 
 #define CLK 14
 #define DIO 4

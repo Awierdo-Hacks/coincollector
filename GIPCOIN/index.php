@@ -26,7 +26,7 @@ if (isset($_POST["goal"])) {
 $conn = mysqli_connect("localhost", "root", "", "coincollector");
 
 //voor totaal
-$query = "SELECT totaal FROM spaardata ORDER BY id DESC LIMIT 1";
+$query = "SELECT SUM(coinvalue) AS totaal FROM coinlog";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 $totalAmount = $row["totaal"];

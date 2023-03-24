@@ -8,140 +8,133 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
   exit();
 }
 
+// connectie maken met de database
+$conn = mysqli_connect("localhost", "root", "", "coincollector");
+if (!$conn) {
+	die("Verbinding mislukt: " . mysqli_connect_error());
+}
 
+// toevoegen van een nieuw doel
+$max_aantal_doelen = 4;
+$result = mysqli_query($conn, "SELECT COUNT(*) AS aantal_doelen FROM spaardata");
+$row = mysqli_fetch_assoc($result);
+if ($row['aantal_doelen'] > $max_aantal_doelen) {
+	$max_aantal_doelen++;
+    echo "<p>Je kunt niet meer dan $max_aantal_doelen doelen hebben.</p>";
+}
+elseif (isset($_POST['toevoegen'])) {
+	$doelbedrag = $_POST['doelbedrag'];
+	$doelnaam = $_POST['doelnaam'];
+	$sql = "INSERT INTO spaardata ( doelbedrag, doelnaam) VALUES ($doelbedrag, '$doelnaam')";
+	if (mysqli_query($conn, $sql)) {
+		echo "Nieuw doel is toegevoegd!";
+	} else {
+		echo "Fout bij toevoegen van nieuw doel: " . mysqli_error($conn);
+	}
+}
+
+// updaten van een doelbedrag of doelnaam
+if (isset($_POST['updaten'])) {
+	$id = $_POST['id'];
+	$doelbedrag = $_POST['doelbedrag'];
+	$doelnaam = $_POST['doelnaam'];
+	$sql = "UPDATE spaardata SET doelbedrag=$doelbedrag, doelnaam='$doelnaam' WHERE id=$id";
+	if (mysqli_query($conn, $sql)) {
+		echo "Doel is bijgewerkt!";
+	} else {
+		echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
+	}
+}
+
+// verwijderen van een doel
+if (isset($_POST['verwijderen'])) {
+	$id = $_POST['id'];
+	$sql = "DELETE FROM spaardata WHERE id=$id";
+	if (mysqli_query($conn, $sql)) {
+		echo "Doel is verwijderd!";
+	} else {
+		echo "Fout bij verwijderen van doel: " . mysqli_error($conn);
+	}
+}
+
+// ophalen van de totale doelbedrag
+$sql = "SELECT SUM(doelbedrag) AS totaal_doelbedrag FROM spaardata";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$totaal_doelbedrag = $row['totaal_doelbedrag'];
+
+// ophalen van het huidig gespaard totaal
+$sql = "SELECT SUM(coinvalue) AS huidig_totaal FROM coinlog";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$huidig_totaal = $row['huidig_totaal'];
+
+// ophalen van alle doelen
+$sql = "SELECT * FROM spaardata";
+$result = mysqli_query($conn, $sql);
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Doelen</title>
 </head>
 <body>
-	<?php
-		// Databaseverbinding maken
-		$servername = "localhost";
-		$username = "root";
-		$password = "";
-		$dbname = "coincollector";
-
-		$conn = new mysqli($servername, $username, $password, $dbname);
-
-		// Controleren op fouten bij het maken van verbinding met de database
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-
-		// Controleren of er een doel wordt bewerkt
-		if (isset($_POST['bewerk'])) {
-			$id = $_POST['id'];
-			$doelbedrag = $_POST['doelbedrag'];
-
-			$sql = "UPDATE spaardata SET doelbedrag='$doelbedrag' WHERE id='$id'";
-			$conn->query($sql);
-		}
-
-		// Controleren of er een doel wordt verwijderd
-		if (isset($_POST['verwijder'])) {
-			$id = $_POST['id'];
-
-			$sql = "DELETE FROM spaardata WHERE id='$id'";
-			$conn->query($sql);
-		}
-
-		// Controleren of er een nieuw doel wordt toegevoegd
-		if (isset($_POST['toevoegen'])) {
-			$doelnaam = $_POST['doelnaam'];
-			$doelbedrag = $_POST['doelbedrag'];
-
-			$sql = "INSERT INTO spaardata (totaal, doelbedrag, doelnaam) VALUES (0, '$doelbedrag', '$doelnaam')";
-			$conn->query($sql);
-		}
-	?>
-
-	<h1>Doelen</h1>
-
+	
+<h1>Doelen</h1>
+	<p>Totaal doelbedrag: <?php echo $totaal_doelbedrag; ?></p>
+	<p>Huidig gespaard totaal: <?php echo$huidig_totaal; ?></p>
 	<table>
-		<thead>
-			<tr>
-				<th>Doelnaam</th>
-				<th>Doelbedrag</th>
-				<th>Huidig totaal</th>
-				<th>Bewerken</th>
-				<th>Verwijderen</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php
-				// Alle doelen ophalen
-				$sql = "SELECT * FROM spaardata";
-				$result = $conn->query($sql);
-
-				// Elk doel weergeven in de tabel
-				if ($result->num_rows > 0) {
-					while ($row = $result->fetch_assoc()) {
-						echo '<tr>';
-						echo '<td>' . $row['id'] . '</td>';
-						echo '<td>' . $row['doelnaam'] . '</td>';
-						echo '<td>' . $row['doelbedrag'] . '</td>';
-                        echo '					<form method="POST" action="doelen.php">
-						<input type="hidden" name="id" value="' . $row['id'] . '">
-						<input type="number" name="doelbedrag" value="' . $row['doelbedrag'] . '">
-						<button type="submit" name="bewerk">Bewerken</button>
-					</form>
-					</td>';
-					echo '<td>';
-					echo '<form method="POST" action="doelen.php">';
-					echo '<input type="hidden" name="id" value="' . $row['id'] . '">';
-					echo '<button type="submit" name="verwijder">Verwijderen</button>';
-					echo '</form>';
-					echo '</td>';
-					echo '</tr>';
-				}
-			} else {
-				echo '<tr><td colspan="5">Er zijn nog geen doelen toegevoegd.</td></tr>';
-			}
-
-			// Totaal doelbedrag berekenen
-			$sql = "SELECT SUM(doelbedrag) AS totaal FROM spaardata";
-			$result = $conn->query($sql);
-			$row = $result->fetch_assoc();
-			$totaal_doelbedrag = $row['totaal'];
-
-			// Huidig totaalbedrag berekenen
-			$sql = "SELECT SUM(totaal) AS totaal FROM spaardata";
-			$result = $conn->query($sql);
-			$row = $result->fetch_assoc();
-			$huidig_totaalbedrag = $row['totaal'];
-
-			echo '<tr>';
-			echo '<td><strong>Totaal</strong></td>';
-			echo '<td><strong>' . $totaal_doelbedrag . '</strong></td>';
-			echo '<td><strong>' . $huidig_totaalbedrag . '</strong></td>';
-			echo '<td></td>';
-			echo '<td></td>';
-			echo '</tr>';
-
-			// Controleren of er maximaal 5 doelen zijn
-			if ($result->num_rows >= 5) {
-				echo '<tr><td colspan="5">Er kunnen maximaal 5 doelen worden toegevoegd.</td></tr>';
-			} else {
-				echo '<tr>';
-				echo '<form method="POST" action="doelen.php">';
-				echo '<td><input type="text" name="doelnaam"></td>';
-				echo '<td><input type="number" name="doelbedrag"></td>';
-				echo '<td></td>';
-				echo '<td><button type="submit" name="toevoegen">Doel toevoegen</button></td>';
-				echo '<td></td>';
-				echo '</form>';
-				echo '</tr>';
-			}
-
-			// Databaseverbinding sluiten
-			$conn->close();
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Doelbedrag</th>
+			<th>Doelnaam</th>
+			<th>Acties</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		while ($row = mysqli_fetch_assoc($result)) {
+			$id = $row['id'];
+			$doelbedrag = $row['doelbedrag'];
+			$doelnaam = $row['doelnaam'];
+		?>
+		<tr>
+			<form method="post">
+				<input type="hidden" name="id" value="<?php echo $id; ?>">
+				<td><?php echo $id; ?></td>
+				<td><input type="number" name="doelbedrag" value="<?php echo $doelbedrag; ?>"></td>
+				<td><input type="text" name="doelnaam" value="<?php echo $doelnaam; ?>"></td>
+				<td>
+					<button type="submit" name="updaten">Bijwerken</button>
+					<button type="submit" name="verwijderen">Verwijderen</button>
+				</td>
+			</form>
+		</tr>
+		<?php
+		}
 		?>
 	</tbody>
 </table>
 
+<h2>Nieuw doel toevoegen</h2>
+<form method="post">
+	<label for="doelbedrag">Doelbedrag:</label>
+	<input type="number" id="doelbedrag" name="doelbedrag" required>
+	<label for="doelnaam">Doelnaam:</label>
+	<input type="text" id="doelnaam" name="doelnaam" required>
+	<button type="submit" name="toevoegen">Toevoegen</button>
+</form>
 
-
+<?php
+// sluiten van de database connectie
+mysqli_close($conn);
+?>
+</body>
+</html>
 
 
