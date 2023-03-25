@@ -1,6 +1,7 @@
 #include <WiFi.h>
+#include <HTTPClient.h>
 
-#define CLK 5
+#define CLK 14
 #define DIO 4
 // WiFi configuration
 const char* ssid = "WIFIIICT";
@@ -11,7 +12,7 @@ WiFiClient client;
 const float coinValues[] = {2, 1, 0.5, 0.2, 0.1};
 
 // Server URL
-const String serverURL = "http://192.168.0.101/GIPCOIN/Coinloginsert.php";
+const String serverURL = "http://10.3.41.58/GIPCOIN/Coinloginsert.php";
 int impulsCount = 0;
 int i = 0;
 float totalAmount = 0;
@@ -36,7 +37,7 @@ void setup() {
   // Set up coin acceptor
   pinMode(CLK, INPUT_PULLUP);
   pinMode(DIO, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(CLK), incomingImpuls, RISING);
+  attachInterrupt(digitalPinToInterrupt(CLK), incomingImpuls, FALLING);
 
   // Load total amount from EEPROM
 
