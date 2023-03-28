@@ -18,9 +18,12 @@ if (!$conn) {
 $max_aantal_doelen = 4;
 $result = mysqli_query($conn, "SELECT COUNT(*) AS aantal_doelen FROM spaardata");
 $row = mysqli_fetch_assoc($result);
-if ($row['aantal_doelen'] > $max_aantal_doelen) {
+$aantaldoelen= $row['aantal_doelen'];
+$protocol = false;
+if ($aantaldoelen > $max_aantal_doelen) {
 	$max_aantal_doelen++;
-    echo "<p>Je kunt niet meer dan $max_aantal_doelen doelen hebben.</p>";
+	$protocol = true;
+
 }
 elseif (isset($_POST['toevoegen'])) {
 	$doelbedrag = $_POST['doelbedrag'];
@@ -81,23 +84,34 @@ $result = mysqli_query($conn, $sql);
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Doelen</title>
+	<link rel="stylesheet" href="Doelen_styling.css">
+	<link rel="stylesheet" href="menu_styling.css">
+  <script src="menu.js" defer></script>
 </head>
 <body>
-	
-<h1>Doelen</h1>
+	<div class="boxes">
+	<?php 
+    if($protocol ==true){
+	echo "<p>Je kunt niet meer dan $max_aantal_doelen doelen hebben.</p>";}
+?>
 	<p>Totaal doelbedrag: <?php echo $totaal_doelbedrag; ?></p>
-	<p>Huidig gespaard totaal: <?php echo$huidig_totaal; ?></p>
-	<table>
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Doelbedrag</th>
-			<th>Doelnaam</th>
-			<th>Acties</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
+	<p>Huidig gespaard totaal: <?php echo$huidig_totaal; ?></p></div>
+	
+	<div class="table-title">
+<h3>Doelen</h3>
+</div>
+<table class="table-fill">
+<thead>
+<tr>
+<th class="text-left">ID</th>
+<th class="text-left">Doelbedrag</th>
+<th class="text-left">Doelnaam</th>
+<th class="text-left">Acties</th>
+
+</tr>
+</thead>
+<tbody class="table-hover">
+<?php
 		while ($row = mysqli_fetch_assoc($result)) {
 			$id = $row['id'];
 			$doelbedrag = $row['doelbedrag'];
@@ -106,10 +120,10 @@ $result = mysqli_query($conn, $sql);
 		<tr>
 			<form method="post">
 				<input type="hidden" name="id" value="<?php echo $id; ?>">
-				<td><?php echo $id; ?></td>
-				<td><input type="number" name="doelbedrag" value="<?php echo $doelbedrag; ?>"></td>
-				<td><input type="text" name="doelnaam" value="<?php echo $doelnaam; ?>"></td>
-				<td>
+				<td class="text-left"><?php echo $id; ?></td>
+				<td class="text-left"><input type="number" name="doelbedrag" value="<?php echo $doelbedrag; ?>"></td>
+				<td class="text-left"><input type="text" name="doelnaam" value="<?php echo $doelnaam; ?>"></td>
+				<td class="text-left">
 					<button type="submit" name="updaten">Bijwerken</button>
 					<button type="submit" name="verwijderen">Verwijderen</button>
 				</td>
@@ -118,10 +132,10 @@ $result = mysqli_query($conn, $sql);
 		<?php
 		}
 		?>
-	</tbody>
+</tbody>
 </table>
 
-<h2>Nieuw doel toevoegen</h2>
+<div class="boxes"><h2>Nieuw doel toevoegen</h2>
 <form method="post">
 	<label for="doelbedrag">Doelbedrag:</label>
 	<input type="number" id="doelbedrag" name="doelbedrag" required>
@@ -129,6 +143,34 @@ $result = mysqli_query($conn, $sql);
 	<input type="text" id="doelnaam" name="doelnaam" required>
 	<button type="submit" name="toevoegen">Toevoegen</button>
 </form>
+</div>
+
+<header class="cd-header">
+		<div class="header-wrapper">
+			<div class="logo-wrap">
+				<a href="#" class="hover-target"><span>	<img src="image\cashwave-low-resolution-logo-color-on-transparent-background (1).png" alt=""></span></a>
+			</div>
+			<div class="nav-but-wrap">
+				<div class="menu-icon hover-target">
+					<span class="menu-icon__line menu-icon__line-left"></span>
+					<span class="menu-icon__line"></span>
+					<span class="menu-icon__line menu-icon__line-right"></span>
+				</div>					
+			</div>					
+		</div>				
+	</header>
+
+	<div class="nav">
+		<div class="nav__content">
+			<ul class="nav__list">
+				<li class="nav__list-item active-nav"><a href="Doelen.php" class="hover-target">Doelen</a></li>
+				<li class="nav__list-item"><a href="index.php" class="hover-target">Overzicht</a></li>
+				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
+				<li class="nav__list-item"><a href="Settings.php" class="hover-target">Settings</a></li>
+				<li class="nav__list-item"><a href="uitlog.php" class="hover-target">Uitloggen</a></li>
+			</ul>
+		</div>
+	</div>		
 
 <?php
 // sluiten van de database connectie

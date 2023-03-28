@@ -32,14 +32,17 @@ $row = mysqli_fetch_assoc($result);
 $totalAmount = $row["totaal"];
 
 //voor doelnaam+bedrag
-$query = "SELECT doelbedrag, doelnaam FROM spaardata ORDER BY id DESC LIMIT 1";
+$query = "SELECT SUM(doelbedrag) as doeltotaal FROM spaardata ";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
-$goalname = $row["doelnaam"];
-$goal = $row["doelbedrag"];
+$goal = $row["doeltotaal"];
+if($totalAmount>= $goal){
+  $percentage1 = intval($goal / $goal * 100);
+  $percentage2 = 100 - $percentage1;}
+  else{
+  $percentage1 = intval($totalAmount / $goal * 100);
+  $percentage2 = 100 - $percentage1;}
 
-$percentage1 = intval($totalAmount / $goal * 100);
-$percentage2 = 100 - $percentage1;
 
 mysqli_close($conn);
 
@@ -54,10 +57,7 @@ mysqli_close($conn);
   <link rel="stylesheet" href="menu_styling.css">
   <script src="menu.js" defer></script>
 
-  <!-- <script defer>
-    document.querySelector(".section-col-1 .income").style.width = "90%";
-    document.querySelector(".section-col-1 .expense").style.width = "10%";
-    </script> -->
+  
 </head>
 <body>
   <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
@@ -76,7 +76,7 @@ mysqli_close($conn);
 
       <div class="section-col-2">
         <div class="section">
-          <p class="color-yellow"> <?php echo $goalname; ?></p>
+          <p class="color-yellow"> Uw doelbedrag</p>
           <h3><span class="font-weight-500"><?php echo $goal; ?></span></h3>
         </div>
       </div>
@@ -93,7 +93,7 @@ mysqli_close($conn);
             </div>
             <div class="expense days-30" style="width: <?php echo $percentage2; ?>%;left: <?php echo $percentage1; ?>%;">
               <div class="expense-tooltip">
-                <p> <?php echo $goalname; ?></p>
+                <p> <?php echo" Uw doelbedrag" ?></p>
                 <h6><?php echo $goal; ?></h6>
               </div>
             </div>
@@ -120,7 +120,7 @@ mysqli_close($conn);
 	<div class="nav">
 		<div class="nav__content">
 			<ul class="nav__list">
-				<li class="nav__list-item active-nav"><a href="controle_paneel.php" class="hover-target">Overzicht</a></li>
+				<li class="nav__list-item active-nav"><a href="index.php" class="hover-target">Overzicht</a></li>
 				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
 				<li class="nav__list-item"><a href="Doelen.php" class="hover-target">Doelen</a></li>
 				<li class="nav__list-item"><a href="Settings.php" class="hover-target">Settings</a></li>
@@ -128,32 +128,12 @@ mysqli_close($conn);
 			</ul>
 		</div>
 	</div>		
-  <a href="#" class="link-to-portfolio hover-target" target="”_blank”"></a>
+  
  
     
   </a>
   </div>
-
-  <!-- ---------------------------------------------
-  <div class="container pt-5">
-      <h1 class="text-center">Coin Acceptor Status</h1>
-      <div id="status-display" class="text-center">
-        <p>Totaal bedrag: <span id="total-amount"><?php
-          echo $totalAmount;
-          ?></span></p>
-        <p><span id="goal"><?php
-          echo $goalname .": ". $goal ;
-          ?></span></p>
-      </div>
-      <h2 class="text-center">Configure Coin Acceptor</h2>
-      <form method="post" action="" class="form-group mx-auto">
-      <label for="goalname">Goalname:</label>
-      <input type="text" class="form-control" id="goalname" name="goalname" value="<?php echo $goalname; ?>" required>
-      <label for="goal">Goal:</label>
-      <input type="number" class="form-control" id="goal" name="goal" value="<?php echo $goal; ?>" required>
-      <button type="submit" class="btn btn-primary mt-3" name="submit">Update</button>
-    </form>
-  </div>-->
+  
 
   
     

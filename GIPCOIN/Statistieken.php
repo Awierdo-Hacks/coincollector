@@ -11,14 +11,35 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 $conn = mysqli_connect("localhost", "root", "", "coincollector");
 
 // Query om het totale gespaarde bedrag te krijgen
-$total_query = mysqli_query($conn, "SELECT totaal AS total_saved FROM spaardata ORDER BY id DESC LIMIT 1");
+$total_query = mysqli_query($conn, "SELECT SUM(coinvalue) AS total_saved FROM coinlog");
 $total_row = mysqli_fetch_assoc($total_query);
 $total_saved = $total_row['total_saved'];
 
 // Query om het bedrag te krijgen dat nog moet worden bespaard
-$goal_query = mysqli_query($conn, "SELECT doelbedrag FROM spaardata ORDER BY id DESC LIMIT 1 ");
+$goal_query = mysqli_query($conn, "SELECT SUM(doelbedrag) AS totalgespaard FROM spaardata  ");
 $goal_row = mysqli_fetch_assoc($goal_query);
-$goal_amount = $goal_row['doelbedrag'] - $total_saved;
+$goal_amount = $goal_row['totalgespaard'] ;
+
+// Haal de namen en bedragen van de spaardoelen op
+$goals_query = mysqli_query($conn, "SELECT doelnaam, doelbedrag FROM spaardata");
+$goals_data = array();
+while($row = mysqli_fetch_assoc($goals_query)) {
+  $goals_data[] = array($row["doelnaam"], $row["doelbedrag"]);
+}
+
+// Voeg de namen en bedragen van de spaardoelen toe aan de dataset
+$chart_data = array();
+$chart_data[] = array("Doelnaam", "Bedrag");
+foreach($goals_data as $goal) {
+  $chart_data[] = array($goal[0], $goal[1]);
+}
+
+// Voeg het totale bedrag toe aan de dataset
+$chart_data[] = array("Gespaard", $total_saved);
+$chart_data[] = array("Nog te sparen", $goal_amount - $total_saved);
+
+// Converteer de dataset naar JSON-formaat
+$chart_data_json = json_encode($chart_data);
 
 // Query om de dagen van de week te krijgen waarop het meeste is bespaard
 $days_query = mysqli_query($conn, "SELECT DAYNAME(tijd) AS day, SUM(coinvalue) AS total_saved FROM coinlog GROUP BY DAYNAME(tijd) ORDER BY total_saved DESC LIMIT 5");
@@ -53,9 +74,20 @@ $current_week = date("W");
 	<script type="text/javascript" defer>
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(drawCharts);
+ // Laad de Visualization API en de corechart package
+ google.charts.load('current', {'packages':['corechart']});
 
+// Teken de grafiek zodra de Visualization API is geladen
+google.charts.setOnLoadCallback(drawChart);
+
+// Functie om de grafiek te tekenen
+function drawChart() {
+  // Maak een nieuwe data table
+ 
+}
 
 		function drawCharts() {
+			
 			// Data ophalen
 			var data = google.visualization.arrayToDataTable([
 				['Dag', 'Bedrag'],
@@ -86,8 +118,7 @@ $current_week = date("W");
         };
 
         // Grafieken tekenen
-        var chart1 = new google.visualization.PieChart(document.getElementById('chart1'));
-        chart1.draw(data, options1);
+      
 
         var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
         chart2.draw(data, options2);
@@ -96,14 +127,7 @@ $current_week = date("W");
         chart3.draw(data, options3);
     }
 </script>
-<div class="nav-but-wrap">
-				<div class="menu-icon hover-target">
-					<span class="menu-icon__line menu-icon__line-left"></span>
-					<span class="menu-icon__line"></span>
-					<span class="menu-icon__line menu-icon__line-right"></span>
-				</div>					
-			</div>					
-		</div>				
+
 </head>
 <body>
 <div class="chart-container">
@@ -120,13 +144,27 @@ $current_week = date("W");
 <div id="chart3" class="chart" style="width: 800px; height: 300px;"></div>
 </div>
 
+<header class="cd-header">
+		<div class="header-wrapper">
+			<div class="logo-wrap">
+				<a href="#" class="hover-target"><span>	<img src="image\cashwave-low-resolution-logo-color-on-transparent-background (1).png" alt=""></span></a>
+			</div>
+			<div class="nav-but-wrap">
+				<div class="menu-icon hover-target">
+					<span class="menu-icon__line menu-icon__line-left"></span>
+					<span class="menu-icon__line"></span>
+					<span class="menu-icon__line menu-icon__line-right"></span>
+				</div>					
+			</div>					
+		</div>				
+	</header>
 <div class="nav">
 		<div class="nav__content">
 			<ul class="nav__list">
                 <li class="nav__list-item"><a href="index.php" class="hover-target">Overzicht</a></li>
 				<li class="nav__list-item active-nav"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
-				<li class="nav__list-item"><a href="#" class="hover-target">Doelen</a></li>
-				<li class="nav__list-item"><a href="#" class="hover-target">Settings</a></li>
+				<li class="nav__list-item"><a href="Doelen.php" class="hover-target">Doelen</a></li>
+				<li class="nav__list-item"><a href="Settings.php" class="hover-target">Settings</a></li>
 				<li class="nav__list-item"><a href="uitlog.php" class="hover-target">Uitloggen</a></li>
 			</ul>
 		</div>
