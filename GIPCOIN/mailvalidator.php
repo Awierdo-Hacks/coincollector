@@ -43,7 +43,7 @@ elseif (mysqli_num_rows($result) == 1)
             // stuurt de mail
             sendMail($_SESSION['message'], "pieter.afr@gmail.com");
             header("Location: index.php");
-            
+            exit;
         }
         else
         {
@@ -54,7 +54,7 @@ elseif (mysqli_num_rows($result) == 1)
             // stuurt de mail
             sendMail($_SESSION['message'], "pieter.afr@gmail.com");
             header("Location: index.php");
-            
+            exit;
         }
     }
     // Verbinding met de database sluiten

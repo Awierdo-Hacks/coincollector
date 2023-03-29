@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$conn = mysqli_connect("localhost", "root", "", "coincollector");
 
 // controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -11,37 +12,62 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 if (isset($_POST["goal"])) {
   $goal = $_POST["goal"];
-  //connect to your database
-  $conn = mysqli_connect("localhost", "root", "", "coincollector");
   //update the data in your database
   $query = "UPDATE spaardata SET doelbedrag = $goal, doelnaam= $goalname";
   $result = mysqli_query($conn, $query);
-  //close the connection
-  mysqli_close($conn);
+  
   //redirect to the home page
-  header("Location:controle_paneel.php");
+  header("Location:index.php");
 }
 
-//connect to your database
-$conn = mysqli_connect("localhost", "root", "", "coincollector");
 
 //voor totaal
 $query = "SELECT SUM(coinvalue) AS totaal FROM coinlog";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
-$totalAmount = $row["totaal"];
+$totalamount = $row["totaal"];
+if ($totalamount == NULL){
+  $totalamount =0;
 
+}
 //voor doelnaam+bedrag
 $query = "SELECT SUM(doelbedrag) as doeltotaal FROM spaardata ";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 $goal = $row["doeltotaal"];
-if($totalAmount>= $goal){
+if($totalamount>= $goal){
   $percentage1 = intval($goal / $goal * 100);
   $percentage2 = 100 - $percentage1;}
   else{
-  $percentage1 = intval($totalAmount / $goal * 100);
+  $percentage1 = intval($totalamount / $goal * 100);
   $percentage2 = 100 - $percentage1;}
+
+  if ($totalamount >= $goal) {
+    $buttonStyle = "display:block;";
+  } else {
+    $buttonStyle = "display:none;";
+  }
+
+  if (isset($_POST["clearCoinLog"])) {
+    // Maak verbinding met de database
+    
+    // Controleer of de verbinding is geslaagd
+    if (!$conn) {
+      die("Verbinding mislukt: " . mysqli_connect_error());
+    }
+  
+    // Voer het SQL-statement uit om de tabel leeg te maken
+    $sql = "TRUNCATE TABLE coinlog";
+    if (mysqli_query($conn, $sql)) {
+      header("Location:index.php");
+
+    } else {
+      echo "Er is een fout opgetreden: " . mysqli_error($conn);
+    }
+  
+    // Sluit de verbinding met de database
+    mysqli_close($conn);
+  }
 
 
 mysqli_close($conn);
@@ -69,8 +95,8 @@ mysqli_close($conn);
     <div class="section-row">
       <div class="section-col-2">
         <div class="section">
-          <p class="color-blue"> Uw totaal</p>
-          <h3><span class="font-weight-500"><?php echo "€" . $totalAmount; ?></span> </h3>
+          <p class="color-blue"> Uw Gespaardbedrag</p>
+          <h3><span class="font-weight-500"><?php echo "€" . $totalamount; ?></span> </h3>
         </div>
       </div>
 
@@ -87,8 +113,8 @@ mysqli_close($conn);
           <div class="section-progress">
             <div class="income days-30" style="width: <?php echo $percentage1; ?>%;">
               <div class="income-tooltip">
-                <p>Totaalbedrag</p>
-                <h6><?php echo "€" . $totalAmount; ?></h6>
+                <p>Gespaardbedrag</p>
+                <h6><?php echo "€" . $totalamount; ?></h6>
               </div>
             </div>
             <div class="expense days-30" style="width: <?php echo $percentage2; ?>%;left: <?php echo $percentage1; ?>%;">
@@ -133,7 +159,9 @@ mysqli_close($conn);
     
   </a>
   </div>
-  
+  <form method="post">
+  <button type="submit" style="<?php echo $buttonStyle; ?>" name="clearCoinLog">Uw kluis legen</button>
+</form>
 
   
     

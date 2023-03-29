@@ -20,6 +20,29 @@ if (isset($_POST['email'])) {
   mysqli_query($conn, "UPDATE users SET email = '$email' WHERE username = '$user'");
 }
 
+
+
+  if (isset($_POST["clearCoinLog"])) {
+    // Maak verbinding met de database
+    
+    // Controleer of de verbinding is geslaagd
+    if (!$conn) {
+      die("Verbinding mislukt: " . mysqli_connect_error());
+    }
+  
+    // Voer het SQL-statement uit om de tabel leeg te maken
+    $sql = "TRUNCATE TABLE coinlog";
+    if (mysqli_query($conn, $sql)) {
+      header("Location:index.php");
+
+    } else {
+      echo "Er is een fout opgetreden: " . mysqli_error($conn);
+    }
+   
+  }
+ // Sluit de verbinding met de database
+ mysqli_close($conn);
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +66,14 @@ if (isset($_POST['email'])) {
     <button type="submit">Opslaan</button>
   </form>
   </div>
+  
+  <form method="post">
+  <button type="submit"  class="button1"><span class='text'>Uw kluis legen</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg></span></button>
+</form>
+ 
+ 
+ 
+ 
   <header class="cd-header">
 		<div class="header-wrapper">
 			<div class="logo-wrap">
