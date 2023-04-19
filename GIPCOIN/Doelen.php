@@ -13,6 +13,21 @@ $conn = mysqli_connect("localhost", "root", "", "coincollector");
 if (!$conn) {
 	die("Verbinding mislukt: " . mysqli_connect_error());
 }
+// check percent
+
+function percentcheck( $conn){
+	$sql = "SELECT SUM(percentage) AS totaal_percentage FROM spaardata";
+	$result = mysqli_query($conn, $sql);
+	$row = mysqli_fetch_assoc($result);
+	$totaal_percentage = $row['totaal_percentage'];
+	if($totaal_percentage<=100 && $totaal_percentage>0 ){
+	return	 true;
+	}else{
+		return false;
+	
+	}
+	}
+
 
 // toevoegen van een nieuw doel
 $max_aantal_doelen = 4;
@@ -38,16 +53,26 @@ elseif (isset($_POST['toevoegen'])) {
 
 // updaten van een doelbedrag of doelnaam
 if (isset($_POST['updaten'])) {
+	
 	$id = $_POST['id'];
 	$doelbedrag = $_POST['doelbedrag'];
 	$doelnaam = $_POST['doelnaam'];
-	$sql = "UPDATE spaardata SET doelbedrag=$doelbedrag, doelnaam='$doelnaam' WHERE id=$id";
+	$percentage = $_POST['percentage'];
+	$percentbool = percentcheck( $conn);
+if($percentbool==true){
+	$sql = "UPDATE spaardata SET doelbedrag=$doelbedrag, doelnaam='$doelnaam', percentage='$percentage' WHERE id=$id";
 	if (mysqli_query($conn, $sql)) {
 		echo "Doel is bijgewerkt!";
 	} else {
 		echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
 	}
-}
+}else{$sql = "UPDATE spaardata SET doelbedrag=$doelbedrag, doelnaam='$doelnaam' WHERE id=$id";
+	if (mysqli_query($conn, $sql)) {
+		echo "Doel is bijgewerkt maar uw percentages kloppen niet!";
+	} else {
+		echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
+	}}}
+$percentage="";
 
 // verwijderen van een doel
 if (isset($_POST['verwijderen'])) {
@@ -59,12 +84,17 @@ if (isset($_POST['verwijderen'])) {
 		echo "Fout bij verwijderen van doel: " . mysqli_error($conn);
 	}
 }
+// checken of dat de verdeling van percentages kan
+$sql= "SELECT percentage, id from spaardata  ";
+$result=mysqli_query($conn, $sql);  
+$row = mysqli_fetch_assoc($result);
 
 // ophalen van de totale doelbedrag
 $sql = "SELECT SUM(doelbedrag) AS totaal_doelbedrag FROM spaardata";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 $totaal_doelbedrag = $row['totaal_doelbedrag'];
+
 
 // ophalen van het huidig gespaard totaal
 $sql = "SELECT SUM(coinvalue) AS huidig_totaal FROM coinlog";
@@ -107,6 +137,7 @@ $result = mysqli_query($conn, $sql);
 <th class="text-left">Doelbedrag</th>
 <th class="text-left">Doelnaam</th>
 <th class="text-left">Acties</th>
+<th class="text-left">percentage</th>
 
 </tr>
 </thead>
@@ -116,17 +147,21 @@ $result = mysqli_query($conn, $sql);
 			$id = $row['id'];
 			$doelbedrag = $row['doelbedrag'];
 			$doelnaam = $row['doelnaam'];
+			$percentage = $row['percentage']
 		?>
 		<tr>
 			<form method="post">
 				<input type="hidden" name="id" value="<?php echo $id; ?>">
 				<td class="text-left"><?php echo $id; ?></td>
-				<td class="text-left"><input type="number" name="doelbedrag" value="<?php echo $doelbedrag; ?>"></td>
+				<td class="text-left"><input type="number" name="doelbedrag" min="0" value="<?php echo $doelbedrag; ?>"></td>
 				<td class="text-left"><input type="text" name="doelnaam" value="<?php echo $doelnaam; ?>"></td>
 				<td class="text-left">
 					<button type="submit" name="updaten">Bijwerken</button>
 					<button type="submit" name="verwijderen">Verwijderen</button>
+			
 				</td>
+				<td class="text-left"><input type="text" name="percentage" value="<?php echo $percentage; ?>"></td>
+
 			</form>
 		</tr>
 		<?php
