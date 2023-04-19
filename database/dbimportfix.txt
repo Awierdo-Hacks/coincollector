@@ -1,0 +1,1 @@
+dit plakken in de collate => utf8mb4_general_ci

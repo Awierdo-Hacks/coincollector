@@ -54,12 +54,19 @@ elseif (isset($_POST['toevoegen'])) {
 // updaten van een doelbedrag of doelnaam
 if (isset($_POST['updaten'])) {
 	
-	$id = $_POST['id'];
-	$doelbedrag = $_POST['doelbedrag'];
-	$doelnaam = $_POST['doelnaam'];
-	$percentage = $_POST['percentage'];
-	$percentbool = percentcheck( $conn);
-if($percentbool==true){
+	$ids = $_POST['id'];
+    $doelbedrags = $_POST['doelbedrag'];
+    $doelnaams = $_POST['doelnaam'];
+    $percentages = $_POST['percentage'];
+	
+	foreach ($ids as $key => $id) {
+        $doelbedrag = $doelbedrags[$key];
+        $doelnaam = $doelnaams[$key];
+        $percentage = $percentages[$key];
+        
+        $percentbool = percentcheck($conn);
+
+	if($percentbool==true){
 	$sql = "UPDATE spaardata SET doelbedrag=$doelbedrag, doelnaam='$doelnaam', percentage='$percentage' WHERE id=$id";
 	if (mysqli_query($conn, $sql)) {
 		echo "Doel is bijgewerkt!";
@@ -71,7 +78,7 @@ if($percentbool==true){
 		echo "Doel is bijgewerkt maar uw percentages kloppen niet!";
 	} else {
 		echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
-	}}}
+	}}}}
 $percentage="";
 
 // verwijderen van een doel
@@ -130,6 +137,7 @@ $result = mysqli_query($conn, $sql);
 	<div class="table-title">
 <h3>Doelen</h3>
 </div>
+<form method="post">
 <table class="table-fill">
 <thead>
 <tr>
@@ -150,25 +158,25 @@ $result = mysqli_query($conn, $sql);
 			$percentage = $row['percentage']
 		?>
 		<tr>
-			<form method="post">
-				<input type="hidden" name="id" value="<?php echo $id; ?>">
-				<td class="text-left"><?php echo $id; ?></td>
-				<td class="text-left"><input type="number" name="doelbedrag" min="0" value="<?php echo $doelbedrag; ?>"></td>
-				<td class="text-left"><input type="text" name="doelnaam" value="<?php echo $doelnaam; ?>"></td>
-				<td class="text-left">
-					<button type="submit" name="updaten">Bijwerken</button>
-					<button type="submit" name="verwijderen">Verwijderen</button>
-			
-				</td>
-				<td class="text-left"><input type="text" name="percentage" value="<?php echo $percentage; ?>"></td>
+		<input type="hidden" name="ids[]" value="<?php echo $id; ?>">
+                <td class="text-left"><?php echo $id; ?></td>
+                <td class="text-left"><input type="number" name="doelbedrag[]" min="0" value="<?php echo $doelbedrag; ?>"></td>
+                <td class="text-left"><input type="text" name="doelnaam[]" value="<?php echo $doelnaam; ?>"></td>
+                <td class="text-left">
+                    <button type="button" class="verwijderen-btn">Verwijderen</button>
+                </td>
+                <td class="text-left"><input type="text" name="percentage[]" value="<?php echo $percentage; ?>"></td>
 
-			</form>
 		</tr>
 		<?php
 		}
 		?>
 </tbody>
 </table>
+
+<button type="submit" name="updaten">Bijwerken</button>
+
+</form>
 
 <div class="boxes"><h2>Nieuw doel toevoegen</h2>
 <form method="post">
