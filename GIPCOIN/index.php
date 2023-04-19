@@ -4,10 +4,10 @@ session_start();
 $conn = mysqli_connect("localhost", "root", "", "coincollector");
 
 // controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-  header("Location:login.php");
-  exit();
-}
+// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+//   header("Location:login.php");
+//   exit();
+// }
 
 
 if (isset($_POST["goal"])) {
