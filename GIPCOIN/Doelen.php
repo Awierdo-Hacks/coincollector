@@ -15,18 +15,10 @@ if (!$conn)
     die("Verbinding mislukt: " . mysqli_connect_error());
 }
 // check percent
-function percentcheck($conn)
-{
-    $sql = "SELECT SUM(percentage) AS totaal_percentage FROM spaardata";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $totaal_percentage = $row['totaal_percentage'];
-    return $totaal_percentage <= 100 && $totaal_percentage > 0;
-}
 
 // toevoegen van een nieuw doel
 $max_aantal_doelen = 4;
-$result = mysqli_query($conn, "SELECT COUNT(*) AS aantal_doelen FROM spaardata");
+$result = mysqli_query($conn, "SELECT COUNT(*) AS aantal_doelen FROM spaardata where isverwijderd= 0");
 $row = mysqli_fetch_assoc($result);
 $aantaldoelen = $row['aantal_doelen'];
 $protocol = false;
@@ -40,7 +32,7 @@ elseif (isset($_POST['toevoegen']))
 {
     $doelbedrag = $_POST['doelbedrag'];
     $doelnaam = $_POST['doelnaam'];
-    $sql = "INSERT INTO spaardata ( doelbedrag, doelnaam) VALUES ($doelbedrag, '$doelnaam')";
+    $sql = "INSERT INTO spaardata ( doelbedrag, doelnaam, isverwijderd) VALUES ($doelbedrag, '$doelnaam',0)";
     if (mysqli_query($conn, $sql))
     {
         echo "Nieuw doel is toegevoegd!";
@@ -57,54 +49,45 @@ if (isset($_POST['updaten']))
 	$ids = array();
 	$doelbedragen = array();
 	$doelnamen = array();
-	$percentages= array();
 	$i = 0;
 	while (array_key_exists("id$i", $_POST)) {
 		array_push($ids, $_POST["id$i"]);
 		array_push($doelbedragen, $_POST["doelbedrag$i"]);
 		array_push($doelnamen, $_POST["doelnaam$i"]);
-		array_push($percentages, $_POST["percentage$i"]);
 		$i++;
 	}
 	foreach ($ids as $_i => $_id) {
 		$_doelbedrag = $doelbedragen[$_i];
 		$_doelnaam = $doelnamen[$_i];
-		$_percentage = $percentages[$_i];
-		if (percentcheck($conn))
-		{ 
-			print_r("pertru");
-			$sql = "UPDATE spaardata SET doelbedrag=$_doelbedrag, doelnaam='$_doelnaam', `percentage`=$_percentage WHERE id=$_id";
-			if (mysqli_query($conn, $sql))
-			{
-				echo "Doel is bijgewerkt!";
-			}
-			else
-			{
-				echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
-			}
-		}
-		else
-		{ 			print_r("perfal");
-
+		
+			
 			$sql = "UPDATE spaardata SET doelbedrag=$_doelbedrag, doelnaam='$_doelnaam' WHERE id=$_id";
 			if (mysqli_query($conn, $sql))
 			{
-				echo "Doel is bijgewerkt maar uw percentages kloppen niet!";
+				$doeldoorgang = true ;
+				
 			}
 			else
 			{
-				echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
+				$doeldoorgang = false;
 			}
 		}
-	}
-}
-$percentage = "";
+		
+		if ( $doeldoorgang== true){
+			echo "Doel is bijgewerkt!";
+		}
+		else{
+			echo "Fout bij bijwerken van doel: " . mysqli_error($conn);
 
-// verwijderen van een doel
+		}
+	}
+
+
+// bereiken van een doel
 if (isset($_POST['verwijderen']))
 {
     $id = $_POST['verwijderen'];
-    $sql = "DELETE FROM spaardata WHERE id=$id";
+    $sql = "UPDATE spaardata SET isverwijderd = 1 WHERE id=$id";
     if (mysqli_query($conn, $sql))
     {
         echo "Doel is verwijderd!";
@@ -114,25 +97,52 @@ if (isset($_POST['verwijderen']))
         echo "Fout bij verwijderen van doel: " . mysqli_error($conn);
     }
 }
-// checken of dat de verdeling van percentages kan
-$sql = "SELECT percentage, id from spaardata  ";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+
+// bereiken van een doel
+if (isset($_POST['btnverwijderen']))
+{
+    $id = $_POST['btnverwijderen'];
+	$sql = "DELETE FROM spaardata WHERE id=$id";
+    if (mysqli_query($conn, $sql))
+    {
+        echo "Doel is verwijderd!";
+    }
+    else
+    {
+        echo "Fout bij verwijderen van doel: " . mysqli_error($conn);
+    }
+}
 
 // ophalen van de totale doelbedrag
-$sql = "SELECT SUM(doelbedrag) AS totaal_doelbedrag FROM spaardata";
+$sql = "SELECT SUM(doelbedrag) AS totaal_doelbedrag FROM spaardata WHERE isverwijderd = 0";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 $totaal_doelbedrag = $row['totaal_doelbedrag'];
-
+if ($totaal_doelbedrag == NULL){
+	$totaal_doelbedrag =0;
+  
+  }
 // ophalen van het huidig gespaard totaal
 $sql = "SELECT SUM(coinvalue) AS huidig_totaal FROM coinlog";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 $huidig_totaal = $row['huidig_totaal'];
+if ($huidig_totaal == NULL){
+	$huidig_totaal =0;
+  
+  }
+$beschikbaarsaldo = $huidig_totaal;
+
+
+//beschikbaarsaldo berekenen
+$sql = "SELECT SUM(doelbedrag) AS gebruiktsaldo FROM spaardata where isverwijderd= 1";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$gebruiktsaldo = $row['gebruiktsaldo'];
+$beschikbaarsaldo = $beschikbaarsaldo -$gebruiktsaldo;
 
 // ophalen van alle doelen
-$sql = "SELECT * FROM spaardata";
+$sql = "SELECT * FROM spaardata where isverwijderd=0";
 $result = mysqli_query($conn, $sql);
 ?>
 
@@ -155,9 +165,11 @@ if ($protocol == true)
     echo "<p>Je kunt niet meer dan $max_aantal_doelen doelen hebben.</p>";
 }
 ?>
-	<p>Totaal doelbedrag: <?php echo $totaal_doelbedrag; ?></p>
-	<p>Huidig gespaard totaal: <?php echo $huidig_totaal; ?></p></div>
-	
+	<p>Totaal doelbedrag: <?php echo"€". $totaal_doelbedrag; ?></p>
+	<p>Saldo: <?php echo "€". $huidig_totaal; ?></p>
+	<p> Beschikbaar Spaargeld: <?php echo"€". $beschikbaarsaldo; ?></p></div>
+	</div>
+
 	<div class="table-title">
 <h3>Doelen</h3>
 </div>
@@ -169,7 +181,6 @@ if ($protocol == true)
 <th class="text-left">Doelbedrag</th>
 <th class="text-left">Doelnaam</th>
 <th class="text-left">Acties</th>
-<th class="text-left">percentage</th>
 
 </tr>
 </thead>
@@ -182,12 +193,11 @@ while ($row = mysqli_fetch_assoc($result))
     $id = $row['id'];
     $doelbedrag = $row['doelbedrag'];
     $doelnaam = $row['doelnaam'];
-    $percentage = $row['percentage'];
 	array_push($doelen, array(
 		"id" => $id,
 		"doelbedrag" => $doelbedrag,
 		"doelnaam" => $doelnaam,
-		"percentage" => $percentage
+	
 	))
 ?>
 		<tr>
@@ -196,10 +206,9 @@ while ($row = mysqli_fetch_assoc($result))
 				<td class="text-left"><input type="number" name="doelbedrag<?php echo $index; ?>" min="0" value="<?php echo $doelbedrag; ?>"></td>
 				<td class="text-left"><input type="text" name="doelnaam<?php echo $index; ?>" value="<?php echo $doelnaam; ?>"></td>
 				<td class="text-left">
-					<button type="submit" name="verwijderen" value="<?php echo $id; ?>">Verwijderen</button>
+					<button type="submit" class="btnTV" name="btnverwijderen" value="<?php echo $id; ?>">Verwijderen</button>
 			
 				</td>
-				<td class="text-left"><input type="text" name="percentage<?php echo $index; ?>" value="<?php echo $percentage; ?>"></td>
 
 		</tr>
 		<?php
@@ -208,7 +217,7 @@ $index++;
 ?>
 </tbody>
 </table>
-<button type="submit" name="updaten">Bijwerken</button>
+<button type="submit" class="button-9" name="updaten">Bijwerken</button>
 
 </form>
 <div class="boxes"><h2>Nieuw doel toevoegen</h2>
@@ -217,7 +226,7 @@ $index++;
 	<input type="number" id="doelbedrag" name="doelbedrag" required>
 	<label for="doelnaam">Doelnaam:</label>
 	<input type="text" id="doelnaam" name="doelnaam" required>
-	<button type="submit" name="toevoegen">Toevoegen</button>
+	<button type="submit" class="btnTV" name="toevoegen">Toevoegen</button>
 </form>
 </div>
 
@@ -254,52 +263,52 @@ mysqli_close($conn);
 ?>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-	?>
+?>
 <script defer>
 	async function doelVerwijderen(id) {
 		const res = await fetch("", {
 			method: 'POST',
-			body: "verwijderen="+id,
+			body: "verwijderen=" + id,
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},
-		})
-		const data = await res.text()
-		return data.includes("Doel is verwijderd!")
+		});
+		const data = await res.text();
+		return data.includes("Doel is verwijderd!");
 	}
 
 	const dataset = {
 		totalBedrag: <?php echo $totaal_doelbedrag ?>,
-		totaalGespaard: <?php echo $huidig_totaal ?>,
+		totaalGespaard: <?php echo $beschikbaarsaldo ?>,
 		doelen: [
 			<?php
-				foreach($doelen as $i => $doel) {
-					echo "{";
-					echo "id: ".$doel["id"]. ',';
-					echo "naam: '".$doel["doelnaam"]. "',";
-					echo "bedrag: ".$doel["doelbedrag"]. ',';
-					echo "percentage: ".$doel["percentage"]. ',';
-					echo "},";
-				}
+			foreach ($doelen as $i => $doel) {
+				echo "{";
+				echo "id: " . $doel["id"] . ",";
+				echo "naam: '" . $doel["doelnaam"] . "',";
+				echo "bedrag: " . $doel["doelbedrag"] . ",";
+				echo "},";
+			}
 			?>
 		]
 	}
+
 	document.body.onload = () => {
 		const totaalPerDoel = dataset.totaalGespaard / dataset.doelen.length;
 		for (const doel of dataset.doelen) {
 			if (doel.bedrag <= totaalPerDoel) {
 				if (confirm(`Doel met naam '${doel.naam}' is bereikt, wil je het verwijderen`)) {
 					doelVerwijderen(doel.id)
-					location.reload()
-				} else {
-					continue
+					location.reload();
 				}
 			}
 		}
 	}
 </script>
-	<?php
+<?php
 }
 ?>
+
+
 </body>
 </html>

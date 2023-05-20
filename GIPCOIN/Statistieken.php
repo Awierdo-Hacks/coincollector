@@ -104,15 +104,15 @@ function drawChart() {
 <body>
 <div class="chart-container">
 <h2>Totale gespaard bedrag</h2>
-<div id="chart1" class="chart"  style="width: 800px; height: 300px;"></div>
+<div id="chart1" class="chart"  ></div>
 </div>
 <div class="chart-container">
 <h2>Dagen van de week waarop het meest wordt bespaard</h2>
-<div id="chart2"  class="chart" style="width: 800px; height: 300px;"></div>
+<div id="chart2"  class="chart" ></div>
 </div>
 <div class="chart-container">
 <h2>Gemiddeld bedrag dat per week is bespaard</h2>
-<div id="chart3" class="chart" style="width: 800px; height: 300px;"></div>
+<div id="chart3" class="chart" ></div>
 </div>
 <header class="cd-header">
 		<div class="header-wrapper">

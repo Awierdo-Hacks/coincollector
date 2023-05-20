@@ -118,13 +118,10 @@ if(isset($error)) {
 }
     ?>
     </p>
-    <a href="#">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-<button type="submit" class="button">inloggen </button></a>
-   
+    
+
+<button class="btnlogin" type="submit">inloggen</button>
+
     
   </form>
 </div>

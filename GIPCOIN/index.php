@@ -35,12 +35,22 @@ $query = "SELECT SUM(doelbedrag) as doeltotaal FROM spaardata ";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 $goal = $row["doeltotaal"];
+if ($goal == NULL){
+  $goal =0;
+
+}
+if ($goal>0){
 if($totalamount>= $goal){
   $percentage1 = intval($goal / $goal * 100);
   $percentage2 = 100 - $percentage1;}
   else{
   $percentage1 = intval($totalamount / $goal * 100);
   $percentage2 = 100 - $percentage1;}
+  }else{
+    $percentage1=0;
+  $percentage2 = 0;}
+  
+
 
   if ($totalamount >= $goal) {
     $buttonStyle = "display:block;";
@@ -103,7 +113,7 @@ mysqli_close($conn);
       <div class="section-col-2">
         <div class="section">
           <p class="color-yellow"> Uw doelbedrag</p>
-          <h3><span class="font-weight-500"><?php echo $goal; ?></span></h3>
+          <h3><span class="font-weight-500"><?php echo "€" . $goal; ?></span></h3>
         </div>
       </div>
       <input hidden class="date-btn" type="radio" id="date-1" name="date-btn" checked />
@@ -120,7 +130,7 @@ mysqli_close($conn);
             <div class="expense days-30" style="width: <?php echo $percentage2; ?>%;left: <?php echo $percentage1; ?>%;">
               <div class="expense-tooltip">
                 <p> <?php echo" Uw doelbedrag" ?></p>
-                <h6><?php echo $goal; ?></h6>
+                <h6><?php echo "€" . $goal; ?></h6>
               </div>
             </div>
           </div>

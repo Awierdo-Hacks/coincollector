@@ -1,16 +1,18 @@
 .chart-container {
     border: 5px solid rgb(12, 1, 1) ;
     border-radius: 8px;
-    margin: 10px auto;
+    margin:   auto;
     width: 80%;
     max-width: 800px;
     color:aliceblue ;
     text-align: center;
  background-color: #303037;
+
   }
   
   .chart {
-    margin: 0 auto;
+    margin:  auto;
+
   }
 
   
