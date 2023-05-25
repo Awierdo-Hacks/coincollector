@@ -3,11 +3,12 @@
 session_start();
 $conn = mysqli_connect("localhost", "root", "", "coincollector");
 
-// controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
-// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-//   header("Location:login.php");
-//   exit();
-// }
+ //controleer of de gebruiker is ingelogd, zo niet, geef een melding weer
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+   header("Location:login.php");
+   exit();
+}
 
 
 if (isset($_POST["goal"])) {
@@ -17,7 +18,7 @@ if (isset($_POST["goal"])) {
   $result = mysqli_query($conn, $query);
   
   //redirect to the home page
-  header("Location:index.php");
+  header("Location:main.php");
 }
 
 
@@ -69,7 +70,7 @@ if($totalamount>= $goal){
     // Voer het SQL-statement uit om de tabel leeg te maken
     $sql = "TRUNCATE TABLE coinlog";
     if (mysqli_query($conn, $sql)) {
-      header("Location:index.php");
+      header("Location:main.php");
 
     } else {
       echo "Er is een fout opgetreden: " . mysqli_error($conn);
@@ -156,7 +157,7 @@ mysqli_close($conn);
 	<div class="nav">
 		<div class="nav__content">
 			<ul class="nav__list">
-				<li class="nav__list-item active-nav"><a href="index.php" class="hover-target">Overzicht</a></li>
+				<li class="nav__list-item active-nav"><a href="main.php" class="hover-target">Overzicht</a></li>
 				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
 				<li class="nav__list-item"><a href="Doelen.php" class="hover-target">Doelen</a></li>
 				<li class="nav__list-item"><a href="Settings.php" class="hover-target">Settings</a></li>

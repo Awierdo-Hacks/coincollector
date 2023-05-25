@@ -36,7 +36,7 @@ if (isset($_POST['email'])) {
     $sql2 = "TRUNCATE TABLE spaardata ";
     $result2 = mysqli_query($conn, $sql2);
     if (mysqli_query($conn, $sql)) {
-      header("Location:index.php");
+      header("Location:main.php");
 
     } else {
       echo "Er is een fout opgetreden: " . mysqli_error($conn);
@@ -99,7 +99,7 @@ if (isset($_POST['email'])) {
 		<div class="nav__content">
       <ul class="nav__list">
         <li class="nav__list-item active-nav"><a href="Settings.php" class="hover-target">Settings</a></li>
-				<li class="nav__list-item"><a href="index.php" class="hover-target">Overzicht</a></li>
+				<li class="nav__list-item"><a href="main.php" class="hover-target">Overzicht</a></li>
 				<li class="nav__list-item"><a href="Statistieken.php" class="hover-target">Statistieken</a></li>
 				<li class="nav__list-item"><a href="Doelen.php" class="hover-target">Doelen</a></li>
 				<li class="nav__list-item"><a href="uitlog.php" class="hover-target">Uitloggen</a></li>

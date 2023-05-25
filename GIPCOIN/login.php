@@ -39,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// Als de gebruiker is gevonden, start dan een sessie en sla gebruikersgegevens op
 			if (mysqli_num_rows($result) == 0)
 			{
-				header("Location: index.php");
+				header("Location: main.php");
 				exit();
 			}
 			elseif (mysqli_num_rows($result) == 1)
@@ -58,7 +58,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 						$_SESSION['message'] = 'Je hebt vandaag al gespaard. Goed gedaan!';
 						// stuurt de mail
 						sendMail($_SESSION['message'], "pieter.afr@gmail.com");
-						header("Location: index.php");
+						header("Location: main.php");
 						exit;
 					}
 					else
@@ -69,7 +69,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 						$_SESSION['message'] = 'Je hebt nog niet gespaard vandaag. Probeer wat te sparen.';
 						// stuurt de mail
 						sendMail($_SESSION['message'], "pieter.afr@gmail.com");
-						header("Location: index.php");
+						header("Location: main.php");
 						exit;
 					}
 				}
