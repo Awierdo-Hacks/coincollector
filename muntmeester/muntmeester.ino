@@ -46,15 +46,15 @@ void loop() {
     // Controleer of er pulsen zijn ontvangen
     if (muntenTeller.puls > 0) {
       // Bepaal de muntwaarde op basis van het aantal pulsen
-      if (muntenTeller.puls == 1) {
+      if (muntenTeller.puls == 2) {
         coinValue = 200;
-      } else if (muntenTeller.puls == 2) {
-        coinValue = 100;
       } else if (muntenTeller.puls == 3) {
-        coinValue = 50;
+        coinValue = 100;
       } else if (muntenTeller.puls == 4) {
-        coinValue = 20;
+        coinValue = 50;
       } else if (muntenTeller.puls == 5) {
+        coinValue = 20;
+      } else if (muntenTeller.puls == 6) {
         coinValue = 10;
       } else {
         coinValue = 0;
