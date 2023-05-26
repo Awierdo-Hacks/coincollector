@@ -24,68 +24,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
-
-        $sql = "SELECT * FROM users WHERE username='$username' AND pass='$pass'";
-        $result = mysqli_query($conn, $sql);
-
-        if(mysqli_num_rows($result) == 1) {
-            // Login successful
-            $_SESSION['loggedin'] = true;     
-            $_SESSION['user'] = $username;
-
-			$query = "SELECT * FROM users WHERE username = '$gebruiker' AND email IS NOT NULL";
-			$result = mysqli_query($conn, $query);
-
-			// Als de gebruiker is gevonden, start dan een sessie en sla gebruikersgegevens op
-			if (mysqli_num_rows($result) == 0)
-			{
-				header("Location: main.php");
-				exit();
-			}
-			elseif (mysqli_num_rows($result) == 1)
-			{
-				$query = "SELECT * FROM mail WHERE username = '$gebruiker' AND bericht IS NOT NULL AND DAY(tijd) = DAY(NOW()) ";
-				$result1 = mysqli_query($conn, $query);
-				if (mysqli_num_rows($result1) == 0)
-				{
-					$resultaat2 = mysqli_query($conn, "SELECT * FROM coinlog WHERE coinvalue IS NOT NULL AND DAY(tijd) = DAY(NOW())");
-
-					if (mysqli_num_rows($resultaat2) == 0)
-					{
-						// Als er nog geen e-mail is verzonden vandaag, stuur dan een e-mail
-						// Query uitvoeren om de nieuwe e-mail op te slaan in de database
-						mysqli_query($conn, "INSERT INTO mail (tijd, bericht, username) VALUES (NOW(), 'Positief', '$gebruiker')");
-						$_SESSION['message'] = 'Je hebt vandaag al gespaard. Goed gedaan!';
-						// stuurt de mail
-						sendMail($_SESSION['message'], "pieter.afr@gmail.com");
-						header("Location: main.php");
-						exit;
-					}
-					else
-					{
-						// Als er nog niet is gespaard vandaag, stuur dan een andere e-mail
-						// Query uitvoeren om de nieuwe e-mail op te slaan in de database
-						mysqli_query($conn, "INSERT INTO  mail (tijd, bericht, username ) VALUES (NOW(), 'Negatief', '$gebruiker'))");
-						$_SESSION['message'] = 'Je hebt nog niet gespaard vandaag. Probeer wat te sparen.';
-						// stuurt de mail
-						sendMail($_SESSION['message'], "pieter.afr@gmail.com");
-						header("Location: main.php");
-						exit;
-					}
-				}
-				// Verbinding met de database sluiten
-			}
-            exit();
-        } else {
-            $error = "Invalid username or password";
-        }
-        mysqli_close($conn);
-    }
-
+ header("mailvalidator.php");
+       
 	
 }
 
-
+}
 
 
 ?> 
