@@ -1,14 +1,10 @@
 <?php
-
-
 session_start();
 require "mailsender.php";
-
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get input values
     $username = $_POST['username'];
     $pass = $_POST['pass'];
-
     // Validate input
     if(empty($username) || empty($pass)) {
         $error = "Please enter both username and password";
@@ -18,24 +14,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dbusername = "root";
         $dbpassword = "";
         $dbname = "coincollector";
-
         $conn = mysqli_connect($servername, $dbusername, $dbpassword, $dbname);
-
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
-
         $sql = "SELECT * FROM users WHERE username='$username' AND pass='$pass'";
         $result = mysqli_query($conn, $sql);
-
         if(mysqli_num_rows($result) == 1) {
             // Login successful
             $_SESSION['loggedin'] = true;     
             $_SESSION['user'] = $username;
-
 			$query = "SELECT * FROM users WHERE username = '$gebruiker' AND email IS NOT NULL";
 			$result = mysqli_query($conn, $query);
-
+			$querygetemail = "SELECT email FROM users WHERE username = '$gebruiker' ";
+			$emailuser = mysqli_query($conn, $query);
 			// Als de gebruiker is gevonden, start dan een sessie en sla gebruikersgegevens op
 			if (mysqli_num_rows($result) == 0)
 			{
@@ -49,7 +41,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				if (mysqli_num_rows($result1) == 0)
 				{
 					$resultaat2 = mysqli_query($conn, "SELECT * FROM coinlog WHERE coinvalue IS NOT NULL AND DAY(tijd) = DAY(NOW())");
-
 					if (mysqli_num_rows($resultaat2) == 0)
 					{
 						// Als er nog geen e-mail is verzonden vandaag, stuur dan een e-mail
@@ -81,14 +72,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         mysqli_close($conn);
     }
-
 	
 }
-
-
-
-
-?> 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

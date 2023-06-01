@@ -15,8 +15,8 @@ function sendMail(string $message, string $address) {
 	$mail->SMTPSecure = "tls";
 	$mail->Port = "587";
 	$mail->Username = "pieter.afr@gmail.com";
-	$mail->Password = "aebxxwsrxjvdduet";
-	$mail->Subject = "titel test";//
+	$mail->Password = "nrhndttrekelpgke";
+	$mail->Subject = "coincollector";//
 	$mail->setFrom('pieter.afr@gmail.com');
 	$mail->isHTML(true);
 	$mail->Body = $message;//
