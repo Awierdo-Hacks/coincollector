@@ -88,7 +88,7 @@ mysqli_close($conn);
 <html>
 
 <head>
-  <title>Cashwave</title>
+  <title>Coincollector</title>
 
   <link rel="stylesheet" href="controle_paneel_styling.css">
   <link rel="stylesheet" href="menu_styling.css">
