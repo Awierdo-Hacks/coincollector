@@ -11,9 +11,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+date_default_timezone_set('Europe/Brussels');
 // Prepare data for insertion
-$time = date("");
+$time = date("Y-m-d H:i:s");
 $coinvalue = ((int)$_GET['coinvalue']) / 100;
 // Prepare SQL statement
 $sql = "INSERT INTO coinlog (tijd, coinvalue) VALUES ('$time', $coinvalue)";
